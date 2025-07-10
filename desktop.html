@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mac os</title>
+    <link rel="stylesheet" href="./css/base.css">
+</head>
+<body>
+    <div id="desktop">
+        
+            <!-- <img class="desktop-image" src="https://images.squarespace-cdn.com/content/v1/5e949a92e17d55230cd1d44f/5199777b-57d0-44e3-80ef-2bfd2811fb95/SkyBlue+Radial.png" alt=""> -->
+        <!-- html for desktop context menu -->
+        <div id="context-menu">
+            <p id="New-Folder" class="context-menu-item">New Folder</p>
+            <hr class="context-menu-item-horizontal-line">
+            <p class="context-menu-item">Get Info</p>
+            <p class="context-menu-item" id="Change-Wallpaper">Change Wallpaper...</p>
+            <p class="context-menu-item">Edit Widgets...</p>
+            <hr class="context-menu-item-horizontal-line">
+            <p class="context-menu-item">Use Stacks</p>
+            <p class="context-menu-item">Sort By <span class="context-menu-item-arrow-sort"> &#8250</span> </p>
+            <p class="context-menu-item">Clean Up</p>
+            <p class="context-menu-item">Clean Up By <span class="context-menu-item-arrow-clean"> &#8250 </span> </p>
+            <p class="context-menu-item">Show View Options</p>
+        </div>
+        <!-- html for folder context menu -->
+        <div id="folder-context-menu">
+            <p class="folder-context-menu-item" id="folder-context-open">Open</p>
+            <hr class="folder-context-menu-item-hr-line">
+            <p class="folder-context-menu-item" id="folder-context-delete">Move to Bin</p>
+            <p class="folder-context-menu-item">get Info</p>
+            <p class="folder-context-menu-item" id="folder-context-rename">Rename</p>
+            <p class="folder-context-menu-item">Compress</p>
+            <p class="folder-context-menu-item" id="folder-context-duplicate">Duplicate</p>
+            <p class="folder-context-menu-item">Make Alias</p>
+            <p class="folder-context-menu-item">Quick Look</p>
+            <hr class="folder-context-menu-item-hr-line">
+            <p class="folder-context-menu-item">Copy</p>
+            <p class="folder-context-menu-item">Share...</p>
+            <hr class="folder-context-menu-item-hr-line">
+            <p class="folder-context-menu-item">Tags...</p>
+            <hr class="folder-context-menu-item-hr-line">
+            <p class="folder-context-menu-item">Quick Actions</p>
+            <hr class="folder-context-menu-item-hr-line">
+            <p class="folder-context-menu-item">Folder Actions Setup...</p>
+            <p class="folder-context-menu-item">New Terminal at Folder</p>
+            <p class="folder-context-menu-item">New Terminal Tab at Folder</p>
+        </div>
+
+        <!-- for changing the wallpaper -->
+        <div id="wallpaper-picker" style="display: none;" class="wallpaper-modal">
+            <img src="https://w0.peakpx.com/wallpaper/945/68/HD-wallpaper-macbook-air-2023-purple-wwdc-2023-abstract.jpg" class="wall-option" />
+            <img src="https://www.iclarified.com/images/news/86400/417644/417644-640.jpg" class="wall-option" />
+            <img src="https://applescoop.org/image/wallpapers/mac/apple-m2-m3-macbook-air-stock-default-wallpaper-2022-dark-green-29-10-2024-1730248226-hd-wallpaper.webp" class="wall-option" />
+            <img src="https://images.squarespace-cdn.com/content/v1/535b1632e4b0ab57db46e48b/1607375302983-UO6926INQQW2GTAFNRUY/sunset3.jpg?format=1000w" class="wall-option" />
+            <img src="https://i.pinimg.com/736x/44/05/15/440515b9e37d5f585d422e9a4a919247.jpg" class="wall-option" />
+            <img src="https://4kwallpapers.com/images/wallpapers/macos-big-sur-apple-layers-fluidic-colorful-wwdc-stock-3840x2160-1455.jpg" class="wall-option" />
+            <img src="https://images.macrumors.com/t/4KLyziXaK4QH9WrIVu6CN9i3z3U=/1600x0/article-new/2024/08/macos-sequoia-hidden-wallpaper.jpg" class="wall-option" />
+        </div>
+
+        <!-- for dock Icon -->
+        <div id="dock">
+            <img class="dock-icon" id="finder-icon" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1751873489/Finder_Icon_macOS_Big_Sur-removebg-preview_qonyx6.png" alt="">
+            <img class="dock-icon" id="safari-icon" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1751872250/Screenshot_2025-07-07_at_12.32.36_PM-removebg-preview_bgobuk.png" alt="">
+            <img class="dock-icon" id="notes-icon" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1751872248/Screenshot_2025-07-07_at_12.32.49_PM-removebg-preview_si27jr.png" alt="">
+            <img class="dock-icon" id="camera-icon" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1751872247/Screenshot_2025-07-07_at_12.32.06_PM-removebg-preview_migcxz.png" alt="">
+            <img class="dock-icon" id="terminal-icon" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1751873144/Screenshot_2025-07-07_at_12.54.39_PM-removebg-preview_gqqw5i.png" alt="">
+        </div>
+
+        <!-- html for safari -->
+        <div id="safari-window" class="app-window hidden">
+            <div class="window-header">
+                <div class="window-controls">
+                    <span class="close-btn"></span>
+                    <span class="min-btn"></span>
+                    <span class="max-btn"></span>
+                </div>
+                <div class="window-title">Safari</div>
+            </div>
+            <div class="window-body">
+                <input type="text" id="safari-url" placeholder="Search or enter website name">
+                <iframe id="safari-browser" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+
+        <!-- html for Notes -->
+        <div id="notes-window" class="app-window hidden">
+            <div class="window-header">
+                <div class="window-controls">
+                    <span class="close-btn"></span>
+                    <span class="min-btn"></span>
+                    <span class="max-btn"></span>
+                </div>
+                <div class="window-title">Notes</div>
+            </div>
+            <div class="notes-body">
+                <div class="notes-sidebar">
+                    <button id="add-note-btn">+</button>
+                    <ul id="notes-list"></ul>
+                </div>
+                <div class="notes-editor-container">
+                    <textarea id="notes-editor" placeholder="Type your note here..."></textarea>
+                </div>
+            </div>
+        </div>
+        <!-- html for camera booth -->
+        <div id="photo-booth-window" class="app-window hidden">
+            <div class="window-header">
+                <div class="window-controls">
+                    <span class="close-btn"></span>
+                    <span class="min-btn"></span>
+                    <span class="max-btn"></span>
+                </div>
+                <div class="window-title">Photo Booth</div>
+            </div>
+            <div class="booth-body">
+                <video id="camera-preview" autoplay playsinline></video>
+                <canvas id="photo-canvas" style="display:none"></canvas>
+
+                <img id="capture-btn" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1751887509/Screenshot_2025-07-07_at_4.52.22_PM-removebg-preview_s1urpd.png" alt="">
+            </div>
+            <div id="gallery-strip"></div>
+        </div>
+
+        <!-- html for terminal -->
+        <div id="terminal-window" class="app-window hidden">
+            <div class="window-header">
+                <div class="window-controls">
+                    <span class="close-btn"></span>
+                    <span class="min-btn"></span>
+                    <span class="max-btn"></span>
+                </div>
+                <div class="window-title">Terminal</div>
+            </div>
+            <div class="terminal-body">
+                <div id="terminal-content">
+                    <!-- All output and input will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- html for finder -->
+        <div id="finder-window" class="app-window hidden">
+            <div class="window-header">
+                <div class="window-controls">
+                    <span class="close-btn"></span>
+                    <span class="min-btn"></span>
+                    <span class="max-btn"></span>
+                </div>
+                <div class="window-title">Finder</div>
+            </div>
+            <div class="finder-body">
+                <div class="finder-sidebar">
+                    <div class="sidebar-section">
+                        <h3>Favorites</h3>
+                        <div class="sidebar-item active" data-location="desktop">
+                            <span class="sidebar-label">Desktop</span>
+                        </div>
+                        <div class="sidebar-item" data-location="documents">
+                            <span class="sidebar-label">Documents</span>
+                        </div>
+                        <div class="sidebar-item" data-location="downloads">
+                            <span class="sidebar-label">Downloads</span>
+                        </div>
+                        <div class="sidebar-item" data-location="applications">
+                            <span class="sidebar-label">Applications</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="finder-content">
+                    <div class="finder-toolbar">
+                        <div class="finder-path">
+                            <span id="current-path">Desktop</span>
+                        </div>
+                        <div class="finder-view-controls">
+                            <button class="view-btn active" data-view="grid">⊞</button>
+                            <button class="view-btn" data-view="list">☰</button>
+                        </div>
+                    </div>
+                    <div class="finder-main" id="finder-main">
+                        <!-- Content will be dynamically loaded here -->
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Context menus for Finder -->
+            <div id="finder-context-menu" class="context-menu hidden">
+                <div class="context-menu-item" id="finder-new-folder">New Folder</div>
+                <hr class="context-menu-divider">
+                <div class="context-menu-item">Get Info</div>
+                <div class="context-menu-item">Show View Options</div>
+            </div>
+        
+            <div id="finder-folder-context-menu" class="context-menu hidden">
+                <div class="context-menu-item" id="finder-folder-open">Open</div>
+                <hr class="context-menu-divider">
+                <div class="context-menu-item" id="finder-folder-delete">Move to Bin</div>
+                <div class="context-menu-item" id="finder-folder-rename">Rename</div>
+                <div class="context-menu-item" id="finder-folder-duplicate">Duplicate</div>
+            </div>
+        </div>
+
+        <!-- Standalone Folder Window -->
+        <div id="folder-window" class="app-window hidden">
+            <div class="window-header">
+                <div class="window-controls">
+                    <span class="close-btn"></span>
+                    <span class="min-btn"></span>
+                    <span class="max-btn"></span>
+                </div>
+                <div class="window-title" id="folder-window-title">Folder</div>
+            </div>
+            <div class="folder-window-body">
+                <div class="folder-toolbar">
+                    <div class="folder-navigation">
+                        <button id="folder-back-btn" class="nav-btn" disabled>‹</button>
+                        <button id="folder-forward-btn" class="nav-btn" disabled>›</button>
+                    </div>
+                    <div class="folder-path">
+                        <span id="current-folder-display">Folder</span>
+                    </div>
+                    <div class="folder-view-controls">
+                        <button class="folder-view-btn active" data-view="grid">⊞</button>
+                        <button class="folder-view-btn" data-view="list">☰</button>
+                    </div>
+                </div>
+                <div class="folder-main" id="folder-main">
+                    <!-- Folder contents will be loaded here -->
+                </div>
+            </div>
+        
+            <!-- Context menus for folder window -->
+            <div id="folder-window-context-menu" class="context-menu hidden">
+                <div class="context-menu-item" id="folder-window-new-folder">New Folder</div>
+                <hr class="context-menu-divider">
+                <div class="context-menu-item">Get Info</div>
+                <div class="context-menu-item">Show View Options</div>
+            </div>
+        
+            <div id="folder-window-item-context-menu" class="context-menu hidden">
+                <div class="context-menu-item" id="folder-window-item-open">Open</div>
+                <hr class="context-menu-divider">
+                <div class="context-menu-item" id="folder-window-item-delete">Move to Bin</div>
+                <div class="context-menu-item" id="folder-window-item-rename">Rename</div>
+                <div class="context-menu-item" id="folder-window-item-duplicate">Duplicate</div>
+            </div>
+        </div>
+
+    </div>
+    
+
+    
+    <script type="module" src="./main.js"></script> 
+</body>
+<!-- macOS Menu Bar -->
+<div id="menu-bar" class="menu-bar">
+    <div class="menu-bar-left">
+        <div class="apple-logo"><img id="logo-img" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059229/Screenshot_2025-07-09_at_4.28.22_PM-removebg-preview_pgxipg.png" alt=""></div>
+        <div class="menu-item">Finder</div>
+        <div class="menu-item">File</div>
+        <div class="menu-item">Edit</div>
+        <div class="menu-item">View</div>
+        <div class="menu-item">Go</div>
+        <div class="menu-item">Window</div>
+        <div class="menu-item">Help</div>
+    </div>
+    
+    <div class="menu-bar-right">
+        <div class="menu-bar-item"><img id="bat-icon" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059228/Screenshot_2025-07-09_at_4.33.03_PM-removebg-preview_dvwkzr.png" alt=""></div>
+        <div class="menu-bar-item" id="wifi-status"><img id="wifi-icon" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059338/Screenshot_2025-07-09_at_4.38.27_PM-removebg-preview_mshjn5.png" alt=""></div>
+        <div class="menu-bar-item"><img id="search-icon" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059229/Screenshot_2025-07-09_at_4.28.49_PM-removebg-preview_c2jbrs.png" alt=""></div>
+        <div class="menu-bar-item" id="theme-toggle">
+            <span id="theme-icon"><img src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059229/Screenshot_2025-07-09_at_4.29.00_PM-removebg-preview_vuagvk.png" alt=""></span>
+        </div>
+        <div class="menu-bar-item" id="date-display" >
+            <span id="current-date">Wed 9 Jul</span>
+        </div>
+        <div class="menu-bar-item" id="time-display">
+            <span id="current-time">4:27 PM</span>
+        </div>
+    </div>
+
+    <div id="Apple-logo-context-menu">
+        <p class="logo-context-menu">About this Mac</p>
+        <hr class="logo-context-menu-hr-line">
+        <p class="logo-context-menu">System Settings...</p>
+        <p class="logo-context-menu">App Store...</p>
+        <hr class="logo-context-menu-hr-line">
+        <p class="logo-context-menu">Recent Items</p>
+        <hr class="logo-context-menu-hr-line">
+        <p class="logo-context-menu">Force Quit...</p>
+        <p class="logo-context-menu">Sleep</p>
+        <p class="logo-context-menu">Restart...</p>
+        <p class="logo-context-menu">Shut Down...</p>
+        <hr class="logo-context-menu-hr-line">
+        <p class="logo-context-menu">Lock Screen</p>
+        <p class="logo-context-menu">Log Out User...</p>
+    </div>
+
+    <div id="battery-icon-context-menu">
+        <div class="battery-header">
+            <span class="battery-title">Battery</span>
+            <span class="battery-percentage">76%</span>
+        </div>
+        <p class="battery-power-source">Power Source: Battery</p>
+        <hr class="battery-hr-line">
+        <p class="significant-energy">No Apps Using Significant Energy</p>
+        <hr class="battery-hr-line">
+        <p class="battery-item clickable">Battery Settings...</p>
+    </div>
+
+    <div id="wifi-icon-context-menu">
+        <div class="wifi-header">
+            <div class="wifi-toggle">
+                <span class="wifi-label">Wi-Fi</span>
+                <div class="wifi-switch">
+                    <input type="checkbox" id="wifi-toggle-switch" checked>
+                    <label for="wifi-toggle-switch" class="switch-slider"></label>
+                </div>
+            </div>
+            <div class="wifi-security-warning">
+                <span class="warning-icon">⚠️</span>
+                <span class="warning-text">Weak Security...</span>
+            </div>
+        </div>
+    
+        <div class="wifi-section">
+            <p class="section-title">Known Network</p>
+            <div class="wifi-network connected" id="wifi-network connected-airtel">
+                <div class="network-icon"><img class="network-icon-image" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059338/Screenshot_2025-07-09_at_4.38.27_PM-removebg-preview_mshjn5.png" alt=""></div>
+                <span class="network-name">Airtel</span>
+                <div class="network-lock">🔒</div>
+            </div>
+            <div class="wifi-network connected">
+                <div class="network-icon"><img class="network-icon-image" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059338/Screenshot_2025-07-09_at_4.38.27_PM-removebg-preview_mshjn5.png" alt=""></div>
+                <span class="network-name">Jio</span>
+                <div class="network-lock">🔒</div>
+            </div>
+        </div>
+    
+        <div class="wifi-section">
+            <div class="other-networks">
+                <span class="section-title">Other Networks</span>
+                <span class="chevron">›</span>
+            </div>
+        </div>
+    
+        <hr class="wifi-separator">
+    
+        <div class="wifi-settings">
+            <span class="settings-text">Wi-Fi Settings...</span>
+        </div>
+    </div>
+    <div class="search-icon-context-menu">
+        <div class="search-container">
+            <div class="search-input-wrapper">
+                <div class="search-icon-img">
+                    <img src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059229/Screenshot_2025-07-09_at_4.28.49_PM-removebg-preview_c2jbrs.png"
+                        alt="">
+                </div>
+                <div class="search-input">
+                    <input type="text" placeholder="Spotlight Search" autocomplete="off">
+                </div>
+            </div>
+            <!-- Move iframe outside the input wrapper -->
+            <div class="search-results-container">
+                <iframe id="search-browser" src="" frameborder="0" style="display: none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls-icon" id="controls-icon-context-menu">
+        <div class="controls-icon-panel">
+            <div class="control-icon-first" id="contorl-icon-wifi">
+                <div class="control-icon-wifi-img"> <img id="control-icon-wifi-image" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752059338/Screenshot_2025-07-09_at_4.38.27_PM-removebg-preview_mshjn5.png" alt=""></div>
+                <div class="control-icon-wifi-na">
+                    <p class="control-icon-wifi-name">Wi-Fi</p>
+                    <p class="control-icon-wifi-connected">Airtel</p>
+                </div>
+            </div>
+
+            <div class="control-icon-first" id="control-icon-bluetooth">
+                <div class="control-icon-bluetooth-img"> <img id="control-icon-bluetooth-image" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752124269/images-removebg-preview_g96bc7.png" alt=""></div>
+                <div class="control-icon-bluetooth-na">
+                    <p class="control-icon-bluetooth-name">Bluetooth</p>
+                    <p class="control-icon-bluetooth-connected"><span id="On">On</span> <span id="Off">off</span></p>
+                </div>
+            </div>
+            <div class="control-icon-first" id="control-icon-airdrop">
+                <div class="control-icon-airdrop-img"> <img id="control-icon-airdrop-image" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752126031/29575-200-removebg-preview_xd2u9j.png" alt=""></div>
+                <div class="control-icon-airdrop-na">
+                    <p class="control-icon-airdrop-name">AirDrop</p>
+                    <p class="control-icon-airdrop-connected"><span id="On">Everyone</span> <span id="Off">off</span></p>
+                </div>
+            </div>
+        </div>
+        <div id="control-panel-right">
+            <img id="control-pannel-focus-img" src="https://res.cloudinary.com/dphhbdytb/image/upload/v1752130440/Screenshot_2025-07-10_at_12.01.30_PM_yiwyej.png" alt="">
+        </div>
+    <!-- for Brightness -->
+        <div class="brightness-slider-container">
+            <p id="display">Display</p>
+            <div class="brightness-slider-wrapper">
+                <input type="range" id="brightness-slider" class="brightness-slider" min="10" max="100" value="100" orient="vertical">
+                <div class="slider-track"></div>
+                <div class="slider-fill"></div>
+                <div class="slider-thumb"></div>
+            </div>
+            <div class="brightness-label">
+                <span id="brightness-percentage">100%</span>
+            </div>
+        </div>
+        <!-- for sound -->
+        <div class="sound">
+            <p id="sound">Sound</p>
+            <div class="sound-slider-wrapper">
+                <input type="range" id="sound-slider" class="sound-slider" min="10" max="100" value="100" orient="vertical">
+                <div class="slider-track"></div>
+                <div class="slider-fill"></div>
+                <div class="slider-thumb"></div>
+            </div>
+            <div class="sound-label">
+                <span id="sound-percentage">100%</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>
