@@ -1,5 +1,6 @@
 export function initCamera() {
     const photoBoothWindow = document.getElementById('photo-booth-window');
+    registerWindow(photoBoothWindow);
     const header = photoBoothWindow.querySelector('.window-header');
     const closeBtn = photoBoothWindow.querySelector('.close-btn');
     const minBtn = photoBoothWindow.querySelector('.min-btn');
@@ -35,6 +36,7 @@ export function initCamera() {
             photoBoothWindow.style.left = cameraState.left || `${(window.innerWidth - 800) / 2}px`;
             photoBoothWindow.style.top = cameraState.top || `${(window.innerHeight - 620) / 2}px`;
             photoBoothWindow.style.zIndex = 2000;
+            bringWindowToFront(photoBoothWindow); 
             
             isMaximized = cameraState.isMaximized || false;
             if (isMaximized) {
@@ -46,17 +48,22 @@ export function initCamera() {
         }
     }
 
-    // UPDATED: Open Photo Booth window when camera icon is clicked
+    //Open Photo Booth window when camera icon is clicked
     document.getElementById('camera-icon').onclick = () => {
-        photoBoothWindow.classList.remove('hidden');
-        photoBoothWindow.style.width = '800px';
-        photoBoothWindow.style.height = '620px';
-        photoBoothWindow.style.left = `${(window.innerWidth - 800) / 2}px`;
-        photoBoothWindow.style.top = `${(window.innerHeight - 620) / 2}px`;
-        photoBoothWindow.style.zIndex = 2000;
-        startCamera();
-        loadSavedPhotos();
-        saveCameraState();
+        if (photoBoothWindow.classList.contains('hidden')) {
+            photoBoothWindow.classList.remove('hidden');
+            photoBoothWindow.style.width = '800px';
+            photoBoothWindow.style.height = '620px';
+            photoBoothWindow.style.left = `${(window.innerWidth - 800) / 2}px`;
+            photoBoothWindow.style.top = `${(window.innerHeight - 620) / 2}px`;
+            photoBoothWindow.style.zIndex = 2000;
+            startCamera();
+            loadSavedPhotos();
+            saveCameraState();
+            bringWindowToFront(photoBoothWindow);
+        } else {
+            bringWindowToFront(photoBoothWindow);
+        };
     };
 
     // UPDATED: Window controls
@@ -80,12 +87,14 @@ export function initCamera() {
                 height: photoBoothWindow.style.height,
                 top: photoBoothWindow.style.top,
                 left: photoBoothWindow.style.left,
+                zIndex: photoBoothWindow.style.zIndex
             };
 
             photoBoothWindow.style.top = '0px';
             photoBoothWindow.style.left = '0px';
             photoBoothWindow.style.width = '100vw';
-            photoBoothWindow.style.height = '100vh';
+            photoBoothWindow.style.height = 'calc(100vh - 24px)';
+            photoBoothWindow.style.zIndex = '10001'; 
             photoBoothWindow.classList.add('maximized');
             isMaximized = true;
         } else {
@@ -93,6 +102,7 @@ export function initCamera() {
             photoBoothWindow.style.height = originalStyle.height || '620px';
             photoBoothWindow.style.left = originalStyle.left || `${(window.innerWidth - 800) / 2}px`;
             photoBoothWindow.style.top = originalStyle.top || `${(window.innerHeight - 620) / 2}px`;
+            photoBoothWindow.style.zIndex = originalStyle.zIndex || '2000';
             photoBoothWindow.classList.remove('maximized');
             isMaximized = false;
         }

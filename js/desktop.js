@@ -292,3 +292,42 @@ export const triggerRename = (folderEl) => {
     if (e.key === "Enter") input.blur();
   });
 };
+
+// Global window management system
+let currentZIndex = 2000;
+const activeWindows = new Set();
+
+function bringWindowToFront(windowElement) {
+    currentZIndex += 10;
+    windowElement.style.zIndex = currentZIndex;
+    
+    // Update active windows tracking
+    activeWindows.add(windowElement);
+    
+    // Remove focus class from all windows
+    document.querySelectorAll('.app-window').forEach(win => {
+        win.classList.remove('window-focused');
+    });
+    
+    // Add focus class to current window
+    windowElement.classList.add('window-focused');
+}
+
+function registerWindow(windowElement) {
+    // Add click listener to bring window to front when clicked anywhere
+    windowElement.addEventListener('mousedown', () => {
+        bringWindowToFront(windowElement);
+    });
+    
+    // Also bring to front when window header is clicked
+    const header = windowElement.querySelector('.window-header');
+    if (header) {
+        header.addEventListener('mousedown', () => {
+            bringWindowToFront(windowElement);
+        });
+    }
+}
+
+// Make functions globally available
+window.bringWindowToFront = bringWindowToFront;
+window.registerWindow = registerWindow;

@@ -1,5 +1,6 @@
 export function initTerminal() {
     const terminalWindow = document.getElementById('terminal-window');
+    registerWindow(terminalWindow);
     const terminalContent = document.getElementById('terminal-content');
     const header = terminalWindow.querySelector('.window-header');
     const closeBtn = terminalWindow.querySelector('.close-btn');
@@ -65,7 +66,7 @@ export function initTerminal() {
             terminalWindow.style.height = terminalState.height || '500px';
             terminalWindow.style.left = terminalState.left || `${(window.innerWidth - 800) / 2}px`;
             terminalWindow.style.top = terminalState.top || `${(window.innerHeight - 500) / 2}px`;
-            terminalWindow.style.zIndex = 2000;
+            bringWindowToFront(terminalWindow);
             
             isMaximized = terminalState.isMaximized || false;
             currentDirectory = terminalState.currentDirectory || '~';
@@ -205,9 +206,9 @@ export function initTerminal() {
         terminalWindow.classList.remove('hidden');
         terminalWindow.style.width = '800px';
         terminalWindow.style.height = '500px';
-        terminalWindow.style.left = `${(window.innerWidth - 800) / 2}px`;
+        terminalWindow.style.left = `${(window.innerWidth - 400) / 2}px`;
         terminalWindow.style.top = `${(window.innerHeight - 500) / 2}px`;
-        terminalWindow.style.zIndex = 2000;
+        bringWindowToFront(terminalWindow);
         
         // Always reinitialize
         commandHistory = [];
@@ -218,7 +219,16 @@ export function initTerminal() {
     }
 
     // Click terminal icon to open
-    document.getElementById('terminal-icon').onclick = openTerminalWindow;
+
+    document.getElementById('terminal-icon').onclick = () => {
+        if (terminalWindow.classList.contains('hidden')) {
+            openTerminalWindow();
+        } else {
+            // If already open, just bring to front
+            bringWindowToFront(terminalWindow);
+        }
+    };
+
 
     // UPDATED: Window controls with state saving
     closeBtn.onclick = () => {
@@ -238,21 +248,31 @@ export function initTerminal() {
                 height: terminalWindow.style.height,
                 top: terminalWindow.style.top,
                 left: terminalWindow.style.left,
+                zIndex: terminalWindow.style.zIndex
             };
-            terminalWindow.style.top = '0px';
+            terminalWindow.style.top = '24px'; // Account for menu bar height
             terminalWindow.style.left = '0px';
             terminalWindow.style.width = '100vw';
-            terminalWindow.style.height = '100vh';
+            terminalWindow.style.height = 'calc(100vh - 24px)';
+            terminalWindow.style.zIndex = '10001'; 
             isMaximized = true;
         } else {
             terminalWindow.style.width = originalStyle.width || '800px';
             terminalWindow.style.height = originalStyle.height || '500px';
             terminalWindow.style.left = originalStyle.left || `${(window.innerWidth - 800) / 2}px`;
             terminalWindow.style.top = originalStyle.top || `${(window.innerHeight - 500) / 2}px`;
+            // FIXED: Ensure z-index is always above menu bar when restoring
+            terminalWindow.style.zIndex = Math.max(parseInt(originalStyle.zIndex) || 2000, 10001);
             isMaximized = false;
         }
         saveTerminalState();
     };
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMaximized && !terminalWindow.classList.contains('hidden')) {
+            maxBtn.click(); 
+        }
+    });
 
     // UPDATED: Draggable header with state saving
     header.addEventListener('mousedown', function(e) {

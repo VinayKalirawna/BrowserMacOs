@@ -1,5 +1,6 @@
 export function initFinder() {
     const finderWindow = document.getElementById('finder-window');
+    registerWindow(finderWindow);
     const finderMain = document.getElementById('finder-main');
     const currentPath = document.getElementById('current-path');
     const header = finderWindow.querySelector('.window-header');
@@ -86,7 +87,7 @@ export function initFinder() {
             finderWindow.style.height = finderState.height || '600px';
             finderWindow.style.left = finderState.left || `${(window.innerWidth - 900) / 2}px`;
             finderWindow.style.top = finderState.top || `${(window.innerHeight - 600) / 2}px`;
-            finderWindow.style.zIndex = 2000;
+            bringWindowToFront(finderWindow);
             
             isMaximized = finderState.isMaximized || false;
             currentLocation = finderState.currentLocation || 'desktop';
@@ -165,8 +166,8 @@ export function initFinder() {
         finderWindow.style.width = '900px';
         finderWindow.style.height = '600px';
         finderWindow.style.left = `${(window.innerWidth - 900) / 2}px`;
-        finderWindow.style.top = `${(window.innerHeight - 600) / 2}px`;
-        finderWindow.style.zIndex = 2000;
+        finderWindow.style.top = `${(window.innerHeight - 800) / 2}px`;
+        bringWindowToFront(finderWindow);
         
         initializeLocationData();
         loadLocation('desktop');
@@ -174,7 +175,14 @@ export function initFinder() {
     }
 
     // Click finder icon to open
-    document.getElementById('finder-icon').onclick = openFinderWindow;
+    document.getElementById('finder-icon').onclick = () => {
+        if (finderWindow.classList.contains('hidden')) {
+            openFinderWindow();
+        } else {
+            bringWindowToFront(finderWindow);
+        }
+    };
+
 
     // Window controls with state saving
     closeBtn.onclick = () => {
@@ -194,21 +202,38 @@ export function initFinder() {
                 height: finderWindow.style.height,
                 top: finderWindow.style.top,
                 left: finderWindow.style.left,
+                zIndex: finderWindow.style.zIndex
             };
-            finderWindow.style.top = '0px';
+            
+            // Add maximized class and set individual properties
+            finderWindow.classList.add('maximized');
+            finderWindow.style.top = '24px';
             finderWindow.style.left = '0px';
             finderWindow.style.width = '100vw';
-            finderWindow.style.height = '100vh';
+            finderWindow.style.height = 'calc(100vh - 24px)';
+            finderWindow.style.zIndex = '10001';
             isMaximized = true;
         } else {
+            // Remove maximized class and restore original values
+            finderWindow.classList.remove('maximized');
             finderWindow.style.width = originalStyle.width || '900px';
             finderWindow.style.height = originalStyle.height || '600px';
             finderWindow.style.left = originalStyle.left || `${(window.innerWidth - 900) / 2}px`;
             finderWindow.style.top = originalStyle.top || `${(window.innerHeight - 600) / 2}px`;
+            finderWindow.style.zIndex = originalStyle.zIndex || '2000';
             isMaximized = false;
         }
         saveFinderState();
     };
+    // Add escape key handler for fullscreen
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMaximized && !finderWindow.classList.contains('hidden')) {
+            maxBtn.click(); 
+        }
+    });
+
+
+
 
     // Draggable header with state saving
     header.addEventListener('mousedown', function(e) {
@@ -226,7 +251,7 @@ export function initFinder() {
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', function() {
             document.removeEventListener('mousemove', onMouseMove);
-            saveFinderState(); // Save state after dragging
+            saveFinderState(); 
         }, { once: true });
     });
 
@@ -337,7 +362,7 @@ export function initFinder() {
 
         itemEl.addEventListener('contextmenu', (e) => {
             e.preventDefault();
-            e.stopPropagation(); // Prevent event bubbling
+            e.stopPropagation(); 
             selectItem(itemEl);
             
             const finderMainRect = finderMain.getBoundingClientRect();
@@ -372,16 +397,14 @@ export function initFinder() {
 
     // FIXED: Prevent desktop context menu when right-clicking anywhere in Finder window
     finderWindow.addEventListener('contextmenu', (e) => {
-        e.stopPropagation(); // Always stop propagation to prevent desktop menu
+        e.stopPropagation(); 
         
         // Check if we're in the finder main area
         const isInFinderMain = e.target.closest('#finder-main');
         
         if (isInFinderMain) {
-            // Let the existing finderMain context menu handler deal with it
             return;
         } else {
-            // Prevent default context menu for other areas of finder window
             e.preventDefault();
         }
     });
@@ -389,7 +412,7 @@ export function initFinder() {
     // Context menu for finder content with improved positioning
     finderMain.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        e.stopPropagation(); // Prevent event bubbling
+        e.stopPropagation();
 
         const clickedItem = e.target.closest('.finder-item');
 
@@ -600,7 +623,7 @@ export function initFinder() {
             if (!finderWindow.classList.contains('hidden')) {
                 saveFinderState();
             }
-        }, 5000); // Save every 5 seconds if finder is open
+        }, 5000);
     }
 
     // Initialize everything and restore state

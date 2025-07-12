@@ -17,17 +17,11 @@ body {
     height: 100%;
     background: url(https://images.macrumors.com/t/4KLyziXaK4QH9WrIVu6CN9i3z3U=/1600x0/article-new/2024/08/macos-sequoia-hidden-wallpaper.jpg);
     background-size: cover;
-    /* ensures image covers full desktop */
     background-repeat: no-repeat;
-    /* disables tiling */
     background-position: center;
-    /* centers image */
 }
 
-/* .desktop-image{
-    width: 100%;
-    height: 100%;
-} */
+
 
 #context-menu {
     display: none;
@@ -104,7 +98,6 @@ body {
     padding: 2px 6px;
     border-radius: 6px;
     display: inline-block;
-    /* 👈 very important */
     max-width: 100px;
     overflow-wrap: break-word;
     word-break: break-word;
@@ -121,7 +114,6 @@ body {
     outline: none;
     width: 80px;
     box-shadow: 0 0 0 2px #007bff81;
-    /* Blue focus ring like macOS */
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
@@ -129,7 +121,6 @@ body {
 /* Folder icon selection style */
 .desktop-folder.selected .folder-icon {
     background-color: rgba(0, 0, 0, 0.32);
-    /* transparent black box */
     border-radius: 2px;
     box-shadow: 0 0 0 1px rgba(250, 248, 248, 0.072);
 }
@@ -145,7 +136,7 @@ body {
 }
 
 
-/* Css for folder context menu and it's itmes */
+/* Css for folder context menu */
 
 #folder-context-menu {
     display: none;
@@ -221,7 +212,6 @@ body {
     position: fixed;
     left: 50%;
     bottom: 20px;
-    /* Adjust for desired distance from screen bottom */
     transform: translateX(-50%);
     display: flex;
     align-items: flex-end;
@@ -292,14 +282,17 @@ body {
 
 .close-btn {
     background: #ff5f56;
+    z-index: 10001;
 }
 
 .min-btn {
     background: #ffbd2e;
+    z-index: 10001;
 }
 
 .max-btn {
     background: #27c93f;
+    z-index: 10001;
 }
 
 .window-body {
@@ -480,7 +473,7 @@ body {
     /* Smooth transition when resizing */
 }
 
-/* Capture button styling - UPDATED for image button */
+/* Capture button styling*/
 #photo-booth-window #capture-btn {
     width: 80px;
     height: 80px;
@@ -1248,42 +1241,6 @@ body.dark-mode .menu-item:hover {
     min-height: calc(100vh - 24px);
 }
 
-/* Dark mode styles */
-body.dark-mode {
-    background: #1a1a1a;
-    color: #ffffff;
-}
-
-body.dark-mode .desktop {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-}
-
-/* Smooth transitions for theme changes */
-* {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-
-/* Update window styles for dark mode */
-body.dark-mode .window {
-    background: rgba(40, 40, 40, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-}
-
-body.dark-mode .window-header {
-    background: rgba(50, 50, 50, 0.9);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .window-title {
-    color: #ffffff;
-}
-
-/* Update dock for dark mode */
-body.dark-mode .dock {
-    background: rgba(40, 40, 40, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
 
 /* css for Apple logo context */
 
@@ -2142,4 +2099,21 @@ network-name-Jio
 /* Hide the sound percentage label */
 .sound-label {
     display: none;
+}
+
+
+/* Fullscreen window adjustments */
+.app-window.maximized {
+    top: 24px !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 24px) !important;
+    z-index: 10001 !important;
+    border-radius: 0 !important;
+}
+
+/* Ensure window controls remain accessible */
+.app-window.maximized .window-header {
+    position: relative;
+    z-index: 10002;
 }

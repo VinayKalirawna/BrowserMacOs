@@ -1,5 +1,6 @@
 export function initSafari() {
     const safariWindow = document.getElementById('safari-window');
+    registerWindow(safariWindow);
     const safariUrlInput = document.getElementById('safari-url');
     const safariBrowser = document.getElementById('safari-browser');
     const header = safariWindow.querySelector('.window-header');
@@ -10,67 +11,33 @@ export function initSafari() {
     let isMaximized = false;
     let originalStyle = {};
 
-    // NEW: State management functions
-    function saveSafariState() {
-        const safariState = {
-            isOpen: !safariWindow.classList.contains('hidden'),
-            width: safariWindow.style.width,
-            height: safariWindow.style.height,
-            left: safariWindow.style.left,
-            top: safariWindow.style.top,
-            isMaximized: isMaximized,
-            currentUrl: safariBrowser.src,
-            urlInputValue: safariUrlInput.value
-        };
-        localStorage.setItem('safariState', JSON.stringify(safariState));
-    }
-
-    function restoreSafariState() {
-        const safariState = JSON.parse(localStorage.getItem('safariState')) || {};
-        
-        if (safariState.isOpen) {
-            safariWindow.classList.remove('hidden');
-            safariWindow.style.width = safariState.width || '800px';
-            safariWindow.style.height = safariState.height || '600px';
-            safariWindow.style.left = safariState.left || `${(window.innerWidth - 800) / 2}px`;
-            safariWindow.style.top = safariState.top || `${(window.innerHeight - 600) / 2}px`;
-            safariWindow.style.zIndex = 2000;
-            
-            isMaximized = safariState.isMaximized || false;
-            
-            // Restore browser content and URL input
-            if (safariState.currentUrl) {
-                safariBrowser.src = safariState.currentUrl;
-            }
-            if (safariState.urlInputValue) {
-                safariUrlInput.value = safariState.urlInputValue;
-            }
-        }
-    }
-
-    // UPDATED: Open Safari window with state saving
+    //Open Safari window with state saving
     function openSafariWindow() {
         safariWindow.classList.remove('hidden');
         safariWindow.style.width = '800px';
         safariWindow.style.height = '600px';
         safariWindow.style.left = `${(window.innerWidth - 800) / 2}px`;
         safariWindow.style.top = `${(window.innerHeight - 600) / 2}px`;
-        safariWindow.style.zIndex = 2000;
+        bringWindowToFront(safariWindow);
 
-        // Only clear if opening fresh (not restoring)
         const safariState = JSON.parse(localStorage.getItem('safariState')) || {};
         if (!safariState.isOpen) {
             safariUrlInput.value = '';
             safariBrowser.src = '';
         }
         
-        saveSafariState();
     }
 
     // Click safari icon to open
-    document.getElementById('safari-icon').addEventListener('click', openSafariWindow);
+    document.getElementById('safari-icon').addEventListener('click', () => {
+        if (safariWindow.classList.contains('hidden')) {
+            openSafariWindow();
+        } else {
+            bringWindowToFront(safariWindow);
+        }
+    });
 
-    // UPDATED: Draggable Window with state saving
+    //Draggable Window with state saving
     header.addEventListener('mousedown', function(e) {
         if (isMaximized) return;
         let shiftX = e.clientX - safariWindow.getBoundingClientRect().left;
@@ -86,31 +53,29 @@ export function initSafari() {
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', function() {
             document.removeEventListener('mousemove', onMouseMove);
-            saveSafariState(); // Save state after dragging
         }, { once: true });
     });
 
-    // UPDATED: Close Button with state saving
+    //Close Button with state saving
     closeBtn.addEventListener('click', () => {
         safariWindow.classList.add('hidden');
         localStorage.removeItem('safari-last-url');
         safariBrowser.src = '';
         safariUrlInput.value = '';
         if (isMaximized) {
+            safariWindow.classList.remove('maximized');
             safariWindow.style.width = '800px';
             safariWindow.style.height = '600px';
             isMaximized = false;
         }
-        saveSafariState();
     });
 
-    // UPDATED: Minimize Button with state saving
+    //Minimize Button with state saving
     minBtn.addEventListener('click', () => {
         safariWindow.classList.add('hidden');
-        saveSafariState();
     });
 
-    // UPDATED: Maximize/Restore Button with state saving
+    //Maximize/Restore Button - Enhanced to match Finder
     maxBtn.addEventListener('click', () => {
         if (!isMaximized) {
             originalStyle = {
@@ -118,23 +83,38 @@ export function initSafari() {
                 height: safariWindow.style.height,
                 top: safariWindow.style.top,
                 left: safariWindow.style.left,
+                zIndex: safariWindow.style.zIndex
             };
-            safariWindow.style.top = '0px';
+            
+            // Add maximized class and set individual properties (like Finder)
+            safariWindow.classList.add('maximized');
+            safariWindow.style.top = '24px';
             safariWindow.style.left = '0px';
             safariWindow.style.width = '100vw';
-            safariWindow.style.height = '100vh';
+            safariWindow.style.height = 'calc(100vh - 24px)';
+            safariWindow.style.zIndex = '10001';
             isMaximized = true;
         } else {
+            // Remove maximized class and restore original values (like Finder)
+            safariWindow.classList.remove('maximized');
             safariWindow.style.width = originalStyle.width || '800px';
             safariWindow.style.height = originalStyle.height || '600px';
             safariWindow.style.left = originalStyle.left || `${(window.innerWidth - 800) / 2}px`;
             safariWindow.style.top = originalStyle.top || `${(window.innerHeight - 600) / 2}px`;
+            safariWindow.style.zIndex = originalStyle.zIndex || '2000';
             isMaximized = false;
         }
-        saveSafariState();
+
     });
 
-    // UPDATED: Search Bar Functionality with state saving
+    // Add escape key handler for fullscreen (matching Finder)
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isMaximized && !safariWindow.classList.contains('hidden')) {
+            maxBtn.click(); 
+        }
+    });
+
+    //  Search Bar Functionality with state saving
     safariUrlInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') {
             let value = this.value.trim();
@@ -146,30 +126,10 @@ export function initSafari() {
             }
             safariBrowser.src = url;
             localStorage.setItem('safari-last-url', url);
-            saveSafariState();
         }
     });
 
-    // NEW: Save state when URL input changes
+    // Save state when URL input changes
     safariUrlInput.addEventListener('input', () => {
-        saveSafariState();
     });
-
-    // NEW: Auto-save state periodically
-    function autoSaveState() {
-        setInterval(() => {
-            if (!safariWindow.classList.contains('hidden')) {
-                saveSafariState();
-            }
-        }, 5000); // Save every 5 seconds if safari is open
-    }
-
-    // NEW: Initialize everything and restore state
-    function initialize() {
-        restoreSafariState();
-        autoSaveState();
-    }
-
-    // Initialize the safari
-    initialize();
 }

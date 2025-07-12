@@ -1,5 +1,6 @@
 export function initNotes() {
   const notesWindow = document.getElementById('notes-window');
+  registerWindow(notesWindow);
   const notesSidebar = document.getElementById('notes-list');
   const notesEditor = document.getElementById('notes-editor');
   const addNoteBtn = document.getElementById('add-note-btn');
@@ -37,7 +38,7 @@ export function initNotes() {
       notesWindow.style.height = notesState.height || '600px';
       notesWindow.style.left = notesState.left || `${(window.innerWidth - 800) / 2}px`;
       notesWindow.style.top = notesState.top || `${(window.innerHeight - 600) / 2}px`;
-      notesWindow.style.zIndex = 2000;
+      bringWindowToFront(notesWindow);
       
       isNotesMaximized = notesState.isMaximized || false;
       selectedNoteId = notesState.selectedNoteId || null;
@@ -76,14 +77,14 @@ export function initNotes() {
     const note = notes.find(n => n.id === id);
     notesEditor.value = note ? note.content : '';
     renderNotesList();
-    saveNotesState(); // Save state when selecting a note
+    saveNotesState(); 
   }
 
   function saveNotes() {
     localStorage.setItem('notes-data', JSON.stringify(notes));
   }
 
-  // UPDATED: Add new note with state saving
+  // Add new note with state saving
   addNoteBtn.onclick = () => {
     const newNote = { id: Date.now(), title: 'New Note', content: '' };
     notes.unshift(newNote);
@@ -92,7 +93,7 @@ export function initNotes() {
     saveNotesState();
   };
 
-  // UPDATED: Auto-save when typing with state saving
+  // Auto-save when typing with state saving
   notesEditor.oninput = () => {
     const note = notes.find(n => n.id === selectedNoteId);
     if (note) {
@@ -102,17 +103,17 @@ export function initNotes() {
       saveNotes();
       renderNotesList();
     }
-    saveNotesState(); // Save state when typing
+    saveNotesState(); 
   };
 
-  // UPDATED: Open Notes window with state saving
+  //Open Notes window with state saving
   function openNotesWindow() {
     notesWindow.classList.remove('hidden');
     notesWindow.style.width = '800px';
     notesWindow.style.height = '600px';
     notesWindow.style.left = `${(window.innerWidth - 800) / 2}px`;
     notesWindow.style.top = `${(window.innerHeight - 600) / 2}px`;
-    notesWindow.style.zIndex = 2000;
+    bringWindowToFront(notesWindow);
     
     renderNotesList();
     if (notes.length > 0) {
@@ -125,9 +126,16 @@ export function initNotes() {
   }
 
   // Click Notes icon to open
-  document.getElementById('notes-icon').onclick = openNotesWindow;
+  document.getElementById('notes-icon').onclick = () => {
+    if (notesWindow.classList.contains('hidden')) {
+      openNotesWindow();
+    } else {
+      // If already open, just bring to front
+      bringWindowToFront(notesWindow);
+    }
+  };
 
-  // UPDATED: Close button with state saving
+  //Close button with state saving
   notesCloseBtn.onclick = () => {
     notesWindow.classList.add('hidden');
     notesEditor.value = '';
@@ -135,13 +143,13 @@ export function initNotes() {
     saveNotesState();
   };
 
-  // UPDATED: Minimize button with state saving
+  // Minimize button with state saving
   notesMinBtn.onclick = () => {
     notesWindow.classList.add('hidden');
     saveNotesState();
   };
 
-  // UPDATED: Maximize/Restore button with state saving
+  // Maximize/Restore button with state saving
   notesMaxBtn.onclick = () => {
     if (!isNotesMaximized) {
       notesOriginalStyle = {
@@ -149,23 +157,28 @@ export function initNotes() {
         height: notesWindow.style.height,
         top: notesWindow.style.top,
         left: notesWindow.style.left,
+        zIndex: notesWindow.style.zIndex
       };
-      notesWindow.style.top = '0px';
+      notesWindow.style.top = '24px';
       notesWindow.style.left = '0px';
       notesWindow.style.width = '100vw';
-      notesWindow.style.height = '100vh';
+      notesWindow.style.height = 'calc(100vh - 24px)';
+      notesWindow.style.zIndex = '10001';
       isNotesMaximized = true;
     } else {
       notesWindow.style.width = notesOriginalStyle.width || '800px';
       notesWindow.style.height = notesOriginalStyle.height || '600px';
       notesWindow.style.left = notesOriginalStyle.left || `${(window.innerWidth - 800) / 2}px`;
       notesWindow.style.top = notesOriginalStyle.top || `${(window.innerHeight - 600) / 2}px`;
+      // Ensure z-index is always above menu bar when restoring
+      notesWindow.style.zIndex = Math.max(parseInt(notesOriginalStyle.zIndex) || 2000, 10001);
       isNotesMaximized = false;
     }
     saveNotesState();
   };
 
-  // UPDATED: Draggable header with state saving
+
+  //Draggable header with state saving
   notesHeader.addEventListener('mousedown', function (e) {
     if (isNotesMaximized) return;
     let shiftX = e.clientX - notesWindow.getBoundingClientRect().left;
@@ -185,7 +198,7 @@ export function initNotes() {
     }, { once: true });
   });
 
-  // NEW: Auto-save state periodically
+  //Auto-save state periodically
   function autoSaveState() {
     setInterval(() => {
       if (!notesWindow.classList.contains('hidden')) {
@@ -194,7 +207,7 @@ export function initNotes() {
     }, 3000); // Save every 3 seconds if notes is open
   }
 
-  // NEW: Initialize everything and restore state
+  //Initialize everything and restore state
   function initialize() {
     renderNotesList();
     if (notes.length > 0) selectNote(notes[0].id);

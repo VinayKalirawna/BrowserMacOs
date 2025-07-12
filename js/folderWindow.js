@@ -378,17 +378,20 @@ export function initFolderWindow() {
                 height: folderWindow.style.height,
                 top: folderWindow.style.top,
                 left: folderWindow.style.left,
+                zIndex: folderWindow.style.zIndex
             };
             folderWindow.style.top = '0px';
             folderWindow.style.left = '0px';
             folderWindow.style.width = '100vw';
-            folderWindow.style.height = '100vh';
+            folderWindow.style.height = 'calc(100vh - 24px)';
+            folderWindow.style.zIndex = '10001';
             isMaximized = true;
         } else {
             folderWindow.style.width = originalStyle.width || '800px';
             folderWindow.style.height = originalStyle.height || '500px';
             folderWindow.style.left = originalStyle.left || `${(window.innerWidth - 800) / 2}px`;
             folderWindow.style.top = originalStyle.top || `${(window.innerHeight - 500) / 2}px`;
+            folderWindow.style.zIndex = originalStyle.zIndex || '2000';
             isMaximized = false;
         }
     };
