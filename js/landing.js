@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
             currentCharIndex++;
             
             // Random typing speed for more natural effect
-            const typingSpeed = Math.random() * 50 + 30; // 30-80ms
+            const typingSpeed = Math.random() * 10 + 10; 
             setTimeout(typewriterEffect, typingSpeed);
         } else {
             // Finished typing this item
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
             currentItemIndex++;
             
             // Pause before starting next item
-            setTimeout(typewriterEffect, 800);
+            setTimeout(typewriterEffect, 300);
         }
     }
     

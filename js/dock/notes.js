@@ -14,7 +14,7 @@ export function initNotes() {
   let isNotesMaximized = false;
   let notesOriginalStyle = {};
 
-  // NEW: State management functions
+  //State management functions
   function saveNotesState() {
     const notesState = {
       isOpen: !notesWindow.classList.contains('hidden'),

@@ -152,11 +152,10 @@ export function initTerminal() {
         // Focus the input
         input.focus();
         
-        // Add event listeners
         input.addEventListener('keydown', handleKeyDown);
         
         scrollToBottom();
-        saveTerminalState(); // Save state when creating new input line
+        saveTerminalState(); 
     }
 
     function handleKeyDown(e) {
@@ -172,15 +171,12 @@ export function initTerminal() {
             currentInput.parentElement.replaceWith(commandLine);
             
             if (command) {
-                // Add to history
                 commandHistory.push(command);
                 historyIndex = commandHistory.length;
                 
-                // Execute command
                 executeCommand(command);
             }
             
-            // Create new input line
             createNewInputLine();
             
         } else if (e.key === 'ArrowUp') {
@@ -201,7 +197,7 @@ export function initTerminal() {
         }
     }
 
-    // UPDATED: Open terminal window with state saving
+    // Open terminal window with state saving
     function openTerminalWindow() {
         terminalWindow.classList.remove('hidden');
         terminalWindow.style.width = '800px';
@@ -224,13 +220,12 @@ export function initTerminal() {
         if (terminalWindow.classList.contains('hidden')) {
             openTerminalWindow();
         } else {
-            // If already open, just bring to front
             bringWindowToFront(terminalWindow);
         }
     };
 
 
-    // UPDATED: Window controls with state saving
+    // Window controls with state saving
     closeBtn.onclick = () => {
         terminalWindow.classList.add('hidden');
         saveTerminalState();
@@ -250,7 +245,7 @@ export function initTerminal() {
                 left: terminalWindow.style.left,
                 zIndex: terminalWindow.style.zIndex
             };
-            terminalWindow.style.top = '24px'; // Account for menu bar height
+            terminalWindow.style.top = '24px';
             terminalWindow.style.left = '0px';
             terminalWindow.style.width = '100vw';
             terminalWindow.style.height = 'calc(100vh - 24px)';
@@ -261,7 +256,6 @@ export function initTerminal() {
             terminalWindow.style.height = originalStyle.height || '500px';
             terminalWindow.style.left = originalStyle.left || `${(window.innerWidth - 800) / 2}px`;
             terminalWindow.style.top = originalStyle.top || `${(window.innerHeight - 500) / 2}px`;
-            // FIXED: Ensure z-index is always above menu bar when restoring
             terminalWindow.style.zIndex = Math.max(parseInt(originalStyle.zIndex) || 2000, 10001);
             isMaximized = false;
         }
@@ -274,7 +268,7 @@ export function initTerminal() {
         }
     });
 
-    // UPDATED: Draggable header with state saving
+    //Draggable header with state saving
     header.addEventListener('mousedown', function(e) {
         if (isMaximized) return;
         e.preventDefault();
@@ -293,7 +287,7 @@ export function initTerminal() {
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
             document.body.style.userSelect = '';
-            saveTerminalState(); // Save state after dragging
+            saveTerminalState(); 
         }
         
         document.addEventListener('mousemove', onMouseMove);
@@ -466,7 +460,7 @@ export function initTerminal() {
         if (targetDir && targetDir.contents) {
             const items = Object.keys(targetDir.contents).sort();
             if (items.length === 0) {
-                return; // Empty directory
+                return; 
             }
             
             items.forEach(item => {

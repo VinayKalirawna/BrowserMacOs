@@ -66,7 +66,7 @@ export function initCamera() {
         };
     };
 
-    // UPDATED: Window controls
+    // Window controls
     closeBtn.onclick = () => {
         photoBoothWindow.classList.add('hidden');
         stopCamera();
@@ -79,7 +79,7 @@ export function initCamera() {
         saveCameraState();
     };
     
-    // UPDATED: Maximize/restore functionality
+    // Maximize/restore functionality
     maxBtn.onclick = () => {
         if (!isMaximized) {
             originalStyle = {
@@ -128,7 +128,7 @@ export function initCamera() {
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
             document.body.style.userSelect = '';
-            saveCameraState(); // Save state after dragging
+            saveCameraState(); 
         }
 
         document.addEventListener('mousemove', onMouseMove);
